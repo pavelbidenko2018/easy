@@ -10,6 +10,8 @@ import java.util.concurrent.RecursiveAction;
 
 class Processing extends RecursiveAction {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Integer[] a;
 	private int start, end;
 
