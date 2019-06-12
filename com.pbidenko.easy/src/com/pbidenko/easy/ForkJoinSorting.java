@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveAction;
+import java.util.stream.Stream;
 
 class Processing extends RecursiveAction {
 
@@ -38,7 +39,7 @@ class Processing extends RecursiveAction {
 			int threshold = a[middle];
 
 			while (i < j) {
-				while (i < middle && a[i] <= threshold)
+				while (i < middle && a[i] < threshold)
 					i++;
 
 				while (j > middle && a[j] >= threshold)
@@ -120,6 +121,9 @@ public class ForkJoinSorting {
 		pool.invoke(task);
 
 		System.out.println(Arrays.toString(arr));
+		
+		Stream<Integer> str = Stream.of(arr);
+		
 		System.out.println("Millis: " + (System.currentTimeMillis() - point));
 	}
 
