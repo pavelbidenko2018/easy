@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveAction;
 class Processing extends RecursiveAction {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Integer[] a;
 	private int start, end;
 
@@ -30,9 +30,39 @@ class Processing extends RecursiveAction {
 	@Override
 	protected void compute() {
 
-		if (start < end)
-			RecursiveAction.invokeAll(getListOfTasks());
-		else
+		if (start <= end) {
+			int i = start;
+			int j = end;
+			int middle = start + (end - start) / 2;
+
+			int threshold = a[middle];
+
+			while (i < j) {
+				while (i < middle && a[i] <= threshold)
+					i++;
+
+				while (j > middle && a[j] >= threshold)
+					j--;
+
+				int z = a[i];
+				a[i] = a[j];
+				a[j] = z;
+
+				if (i == middle)
+					middle = j;
+				else if (j == middle)
+					middle = i;
+
+				Processing t1 = new Processing(a, start, middle);
+				Processing t2 = new Processing(a, middle + 1, end);
+
+				t1.fork();
+				
+				t2.compute();
+			
+				t1.join();
+			}
+		} else
 			return;
 
 	}
@@ -47,8 +77,8 @@ class Processing extends RecursiveAction {
 
 		int threshold = a[middle];
 
-		while (i < j) {
-			while (i < middle && a[i] < threshold)
+		while (i <= j) {
+			while (i <= middle && a[i] <= threshold)
 				i++;
 
 			while (j > middle && a[j] >= threshold)
